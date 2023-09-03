@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\FileDownloaded;
 use App\Models\File;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
@@ -70,11 +72,30 @@ class FileController extends Controller
         return view('files.download-link', compact('downloadLink'));
     }
 
-    public function download($token)
+    public function download(Request $request, $token)
     {
         $file = File::where('unique_identifier', $token)->firstOrFail();
         $filePath = $file->path;
         $fileName = $file->name;
+
+
+        $ipDetails = Http::get('https://api.ipgeolocation.io/ipgeo?apiKey=92d57df724104d3e8959fed5dccb1228')->body();
+
+        $json = json_decode($ipDetails);
+        $country_name = $json->country_name;
+        $country_code2 = $json->country_code2;
+
+
+        $downloadDetails = [
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'country' => "Country name: $country_name, Code: $country_code2",
+            'file_id' => $file->id,
+        ];
+        
+        FileDownloaded::dispatch($downloadDetails);
+
+        $file->increment('total_downloads');
 
         return Storage::disk('local')->download($filePath, $fileName);
         // return response()->file(storage_path('app/' .$filePath));
@@ -94,3 +115,6 @@ class FileController extends Controller
             ->with('type', 'success');
     }
 }
+
+
+// https://api.ipgeolocation.io/ipgeo?apiKey=92d57df724104d3e8959fed5dccb1228
