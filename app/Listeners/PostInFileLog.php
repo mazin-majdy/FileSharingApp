@@ -31,9 +31,5 @@ class PostInFileLog
             'country' => $downloadDetails['country'],
             'file_id' => $downloadDetails['file_id'],
         ]);
-        //     'user_id' => $file->user_id,
-        //     'user_id' => $classwork->user_id,
-        //     'content' => $content,
-        // ]);
     }
 }
