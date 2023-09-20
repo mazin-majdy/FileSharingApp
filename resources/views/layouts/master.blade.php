@@ -19,7 +19,9 @@
     <nav class="navbar bg-body-tertiary mb-5">
         <div class="container">
 
+
             <a href="{{ route('files') }}" class="navbar-brand">File Sharing</a>
+
 
             <form role="search" method="get" action="{{ URL::current() }}">
                 <div class="d-flex">

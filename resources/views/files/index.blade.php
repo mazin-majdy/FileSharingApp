@@ -15,6 +15,7 @@
                 <td>File Extension</td>
                 <td>File Unique Identifier</td>
                 <td>Uploaded At</td>
+                <td>Number of downloads</td>
                 <td>Actions</td>
             </tr>
         </thead>
@@ -25,6 +26,7 @@
                     <td>{{ strtoupper(substr(strstr($file->path, '.'), 1)) }}</td>
                     <td>{{ $file->unique_identifier }}</td>
                     <td>{{ $file->created_at->diffForHumans() }}</td>
+                    <td>{{ $file->total_downloads }}</td>
                     <td>
                         <a href="{{ route('files.download', $file->id) }}" class="btn btn-primary"><i
                                 class="fa-solid fa-link"></i></a>

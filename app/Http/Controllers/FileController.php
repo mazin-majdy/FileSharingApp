@@ -92,7 +92,7 @@ class FileController extends Controller
             'country' => "Country name: $country_name, Code: $country_code2",
             'file_id' => $file->id,
         ];
-        
+
         FileDownloaded::dispatch($downloadDetails);
 
         $file->increment('total_downloads');
@@ -114,6 +114,7 @@ class FileController extends Controller
             ->with('msg', 'File deleted successfully.')
             ->with('type', 'success');
     }
+
 }
 
 
